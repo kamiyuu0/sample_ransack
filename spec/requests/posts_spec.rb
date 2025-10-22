@@ -137,15 +137,15 @@ RSpec.describe "/posts", type: :request do
 
     context "パラメータのセキュリティテスト" do
       it "許可されていないパラメータは無視される" do
-        malicious_params = valid_attributes.merge({ 
-          admin: true, 
+        malicious_params = valid_attributes.merge({
+          admin: true,
           created_at: 1.year.ago,
           updated_at: 1.year.ago
         })
-        
+
         post posts_url, params: { post: malicious_params }
         created_post = Post.last
-        
+
         # 許可されていない属性は設定されていないことを確認
         expect(created_post).not_to respond_to(:admin)
       end
@@ -158,7 +158,7 @@ RSpec.describe "/posts", type: :request do
         post = Post.create! valid_attributes
         patch post_url(post), params: { post: new_attributes }
         post.reload
-        
+
         expect(post.title).to eq(new_attributes[:title])
         expect(post.description).to eq(new_attributes[:description])
       end
@@ -180,7 +180,7 @@ RSpec.describe "/posts", type: :request do
         post = Post.create! valid_attributes
         patch post_url(post), params: { post: new_attributes }, as: :json
         expect(response).to have_http_status(:ok)
-        
+
         post.reload
         expect(post.title).to eq(new_attributes[:title])
       end
@@ -254,10 +254,10 @@ RSpec.describe "/posts", type: :request do
         title: "<script>alert('xss')</script>",
         description: "<img src=x onerror=alert('xss')>"
       }
-      
+
       post posts_url, params: { post: xss_params }
       created_post = Post.last
-      
+
       # データは保存されるが、ビューでエスケープされることを期待
       expect(created_post.title).to eq("<script>alert('xss')</script>")
       expect(created_post.description).to eq("<img src=x onerror=alert('xss')>")
