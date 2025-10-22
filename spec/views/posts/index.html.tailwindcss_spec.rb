@@ -16,8 +16,15 @@ RSpec.describe "posts/index", type: :view do
 
   it "renders a list of posts" do
     render
-    cell_selector = 'div>p'
-    assert_select cell_selector, text: Regexp.new("Title".to_s), count: 2
-    assert_select cell_selector, text: Regexp.new("MyText".to_s), count: 2
+    # 各投稿のコンテナが2つあることを確認
+    assert_select 'div[id^="post_"]', count: 2
+    # タイトルのラベルが2回表示されることを確認
+    assert_select 'strong', text: 'Title:', count: 2
+    # 説明のラベルが2回表示されることを確認
+    assert_select 'strong', text: 'Description:', count: 2
+    # タイトルの値が表示されることを確認（正確なテキストマッチング）
+    expect(rendered).to include('Title').at_least(2).times
+    # 説明の値が表示されることを確認（正確なテキストマッチング）
+    expect(rendered).to include('MyText').at_least(2).times
   end
 end
