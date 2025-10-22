@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "posts/index", type: :view do
   before(:each) do
-    assign(:posts, [
+    posts = [
       Post.create!(
         title: "Title",
         description: "MyText"
@@ -11,7 +11,10 @@ RSpec.describe "posts/index", type: :view do
         title: "Title",
         description: "MyText"
       )
-    ])
+    ]
+    assign(:posts, posts)
+    # Ransackのクエリオブジェクトを設定
+    assign(:q, Post.ransack({}))
   end
 
   it "renders a list of posts" do
@@ -26,5 +29,7 @@ RSpec.describe "posts/index", type: :view do
     expect(rendered).to include('Title').at_least(2).times
     # 説明の値が表示されることを確認（正確なテキストマッチング）
     expect(rendered).to include('MyText').at_least(2).times
+    # 検索フォームが表示されることを確認
+    expect(rendered).to include('キーワード検索')
   end
 end

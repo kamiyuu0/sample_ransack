@@ -35,7 +35,7 @@ RSpec.describe "/posts", type: :request do
     end
 
     it "JSON形式での投稿一覧が正常に取得できる" do
-      post = Post.create! valid_attributes
+      Post.create! valid_attributes
       get posts_url, as: :json
       expect(response).to be_successful
       expect(response.content_type).to include('application/json')
@@ -44,6 +44,16 @@ RSpec.describe "/posts", type: :request do
     it "投稿が存在しない場合でも正常に表示される" do
       get posts_url
       expect(response).to be_successful
+    end
+
+    it "ransack検索が正常に動作する" do
+      post1 = Post.create!(title: "Rails Tutorial", description: "Learn Rails")
+      post2 = Post.create!(title: "Python Guide", description: "Learn Python")
+
+      get posts_url, params: { q: { title_or_description_cont: "Rails" } }
+      expect(response).to be_successful
+      expect(response.body).to include(post1.title)
+      expect(response.body).not_to include(post2.title)
     end
   end
 
