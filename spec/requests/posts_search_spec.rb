@@ -86,7 +86,7 @@ RSpec.describe "Posts Search", type: :request do
         create(:tag, name: "NonExistentTag")
         get posts_path, params: { q: { tags_name_in: "NonExistentTag" } }
         expect(response).to have_http_status(:success)
-        expect(response.body).to include("検索条件に一致する投稿が見つかりませんでした")
+        expect(response.body).to include("「NonExistentTag」に一致する投稿が見つかりませんでした")
       end
 
       it "combines keyword and tag search" do

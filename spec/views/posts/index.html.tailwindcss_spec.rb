@@ -15,6 +15,8 @@ RSpec.describe "posts/index", type: :view do
     assign(:posts, posts)
     # Ransackのクエリオブジェクトを設定
     assign(:q, Post.ransack({}))
+    # @all_tagsを設定
+    assign(:all_tags, Tag.order(:name))
   end
 
   it "renders a list of posts" do
