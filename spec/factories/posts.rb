@@ -17,6 +17,41 @@ FactoryBot.define do
       description { "" }
     end
 
+    # タグ関連のトレイト
+    trait :with_tags do
+      after(:create) do |post|
+        post.tags << create(:tag, name: "Ruby")
+        post.tags << create(:tag, name: "Rails")
+      end
+    end
+
+    trait :with_ruby_tag do
+      after(:create) do |post|
+        post.tags << create(:tag, name: "Ruby")
+      end
+    end
+
+    trait :with_rails_tag do
+      after(:create) do |post|
+        post.tags << create(:tag, name: "Rails")
+      end
+    end
+
+    trait :with_javascript_tag do
+      after(:create) do |post|
+        post.tags << create(:tag, name: "JavaScript")
+      end
+    end
+
+    trait :with_multiple_tags do
+      after(:create) do |post|
+        post.tags << create(:tag, name: "Ruby")
+        post.tags << create(:tag, name: "Rails")
+        post.tags << create(:tag, name: "JavaScript")
+        post.tags << create(:tag, name: "React")
+      end
+    end
+
     # シーケンスを使用してユニークなデータを生成
     factory :post_with_sequence do
       sequence(:title) { |n| "投稿タイトル #{n}" }
