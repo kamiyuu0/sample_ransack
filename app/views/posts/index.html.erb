@@ -45,6 +45,11 @@
       <% if params[:q].present? && (params[:q][:title_or_description_cont].present? || (params[:q][:tags_name_in].present? && params[:q][:tags_name_in].strip.present?)) %>
         <div class="space-y-1">
           <% if params[:q][:title_or_description_cont].present? %>
+            <div class="font-medium">「<%= params[:q][:title_or_description_cont] %>」の検索結果: <%= @posts.count %>件</div>
+          <% elsif params[:q][:tags_name_in].present? && params[:q][:tags_name_in].strip.present? %>
+            <div class="font-medium">「<%= params[:q][:tags_name_in] %>」の検索結果: <%= @posts.count %>件</div>
+          <% end %>
+          <% if params[:q][:title_or_description_cont].present? %>
             <div>キーワード: 「<span class="font-medium"><%= params[:q][:title_or_description_cont] %></span>」</div>
           <% end %>
           <% if params[:q][:tags_name_in].present? && params[:q][:tags_name_in].strip.present? %>
@@ -52,7 +57,6 @@
               <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"><%= params[:q][:tags_name_in] %></span>
             </div>
           <% end %>
-          <div class="font-medium">検索結果: <%= @posts.count %>件</div>
         </div>
       <% else %>
         全件表示: <%= @posts.count %>件
@@ -75,7 +79,11 @@
     <% else %>
       <div class="text-center my-10">
         <% if params[:q].present? && (params[:q][:title_or_description_cont].present? || (params[:q][:tags_name_in].present? && params[:q][:tags_name_in].strip.present?)) %>
-          <p class="text-gray-500">検索条件に一致する投稿が見つかりませんでした。</p>
+          <% if params[:q][:title_or_description_cont].present? %>
+            <p class="text-gray-500">「<%= params[:q][:title_or_description_cont] %>」に一致する投稿が見つかりませんでした</p>
+          <% elsif params[:q][:tags_name_in].present? && params[:q][:tags_name_in].strip.present? %>
+            <p class="text-gray-500">「<%= params[:q][:tags_name_in] %>」に一致する投稿が見つかりませんでした</p>
+          <% end %>
           <p class="text-sm text-gray-400 mt-2">
             <%= link_to "全ての投稿を表示", posts_path, class: "text-blue-600 hover:text-blue-500 underline" %>
           </p>
