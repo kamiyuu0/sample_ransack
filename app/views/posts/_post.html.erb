@@ -7,4 +7,22 @@
     <strong class="block font-medium mb-1">Description:</strong>
     <%= post.description %>
   </div>
+  <% if post.tags.any? %>
+    <div>
+      <strong class="block font-medium mb-1">Tags:</strong>
+      <div class="flex flex-wrap gap-1">
+        <% displayed_tags = post.tags.limit(3) %>
+        <% displayed_tags.each do |tag| %>
+          <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+            <%= tag.name %>
+          </span>
+        <% end %>
+        <% if post.tags.count > 3 %>
+          <span class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+            +<%= post.tags.count - 3 %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

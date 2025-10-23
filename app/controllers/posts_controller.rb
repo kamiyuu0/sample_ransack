@@ -3,12 +3,13 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @q = Post.ransack(params[:q])
+    @q = Post.includes(:tags).ransack(params[:q])
     @posts = @q.result(distinct: true)
   end
 
   # GET /posts/1 or /posts/1.json
   def show
+    @post = Post.includes(:tags).find(params[:id])
   end
 
   # GET /posts/new
@@ -18,6 +19,8 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
+    @post = Post.includes(:tags).find(params[:id])
+    @post.tag_names = @post.tag_names_as_string
   end
 
   # POST /posts or /posts.json
@@ -66,6 +69,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :description)
+      params.require(:post).permit(:title, :description, :tag_names)
     end
 end
