@@ -5,9 +5,16 @@ class PostsController < ApplicationController
   def index
     @q = Post.includes(:tags).ransack(params[:q])
     @posts = @q.result(distinct: true)
-  end
 
-  # GET /posts/1 or /posts/1.json
+    # タグでの単一検索処理
+    if params[:q].present? && params[:q][:tags_name_in].present? && params[:q][:tags_name_in].strip.present?
+      selected_tag = params[:q][:tags_name_in].strip
+      # 選択されたタグを持つ投稿のみを検索
+      @posts = @posts.joins(:tags).where(tags: { name: selected_tag })
+    end
+
+    @all_tags = Tag.order(:name)
+  end  # GET /posts/1 or /posts/1.json
   def show
     @post = Post.includes(:tags).find(params[:id])
   end
