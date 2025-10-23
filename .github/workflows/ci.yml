@@ -73,10 +73,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install Node.js dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
+
+      - name: Precompile assets
+        env:
+          RAILS_ENV: test
+        run: bin/rails assets:precompile
 
       - name: Run tests
         env:
